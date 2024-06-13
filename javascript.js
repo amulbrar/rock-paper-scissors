@@ -1,8 +1,3 @@
-function getHumanChoice() {
-    let humanChoice = prompt("enter your choice");
-    return humanChoice;
-}
-
 function getComputerChoice(){
     let num = Math.random(); 
     
@@ -18,44 +13,53 @@ function getComputerChoice(){
 let humanScore = 0;
 let computerScore = 0;
 
+let rockBtn = document.querySelector('#rock-btn');
+let paperBtn = document.querySelector('#paper-btn');
+let scissorsBtn = document.querySelector('#scissors-btn');
+
+rockBtn.addEventListener('click', () => playRound("rock", getComputerChoice()));
+paperBtn.addEventListener('click', () => playRound("paper", getComputerChoice()));
+scissorsBtn.addEventListener('click', () => playRound("scissors", getComputerChoice()));
+
+let resultDiv = document.querySelector('#results');
+let scoresDiv = document.querySelector('#scores');
+
 function playRound(humanChoice, computerChoice) {
-    humanChoice = humanChoice.toLowerCase();
-    computerChoice = computerChoice.toLowerCase();
 
     if(humanChoice === "rock" && computerChoice === "scissors" ||
        humanChoice === "paper" && computerChoice === "rock" ||
        humanChoice === "scissors" && computerChoice === "paper") {
             humanScore = humanScore + 1;
-            console.log("human beats computer");
-            console.log("human score: " + humanScore);
-            console.log("computer score: " + computerScore);
+            resultDiv.textContent = "human beats computer";
     } else if(computerChoice === "rock" && humanChoice === "scissors" ||
               computerChoice === "paper" && humanChoice === "rock" ||
               computerChoice === "scissors" && humanChoice === "paper") {
                     computerScore = computerScore + 1;
-                    console.log("computer beats human");
-                    console.log("human score: " + humanScore);
-                    console.log("computer score: " + computerScore);
+                    resultDiv.textContent = "computer beats human";
     } else {
-            console.log("tie!");
-            console.log("human score: " + humanScore);
-            console.log("computer score: " + computerScore);
+            resultDiv.textContent = "tie!";
+    }
+
+    scoresDiv.textContent = `human score: ${humanScore} | computer score: ${computerScore}`;
+
+    if(humanScore === 5 || computerScore === 5){
+        announceWinner();
+        resetGame();
     }
 }
 
-function playGame(){
-    let i = 0;
-    for(i = 0; i < 5; i++){
-        const humanSelection = getHumanChoice();
-        const computerSelection = getComputerChoice();
-        playRound(humanSelection, computerSelection);
-    }
-
+function announceWinner(){
     if(humanScore > computerScore){
-        console.log("human won the game");
+        resultDiv.textContent = "human won the game";
     } else if(computerScore > humanScore){
-        console.log("computer won the game");
+        resultDiv.textContent = "computer won the game";
     } else {
-        console.log("game over with a tie");
+        resultDiv.textContent = "game over with a tie";
     }
+}
+
+function resetGame() {
+    humanScore = 0;
+    computerScore = 0;
+    scoresDiv.textContent = "";
 }
